@@ -25,7 +25,7 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 preferred2FAMethod=info.get(TFA)
             )
             try:
-                response = self.eufyApi.authenticate()
+                response = await self.eufyApi.authenticate()
                 _LOGGER.debug('step_user: response %s' % response)
                 if(response == 'OK'):
                     _LOGGER.info('step_user: token %s, expire %s, domain %s ' % (self.eufyApi.token, self.eufyApi.token_expire_at, self.eufyApi.domain))

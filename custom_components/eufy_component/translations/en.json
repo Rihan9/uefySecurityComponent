@@ -17,6 +17,7 @@
         "login_error": "something went wrong"
     },
     "abort": {
-        "not_supported": "two factor authentication is currently nnot supported"
+        "not_supported": "two factor authentication is currently nnot supported",
+        "login_error": "something went wrong"
     }
 }

@@ -1,6 +1,6 @@
 from homeassistant import config_entries
 from .const import DOMAIN, PASSWORD, EMAIL, TFA, TFA_NONE, TFA_EMAIL, TFA_SMS, TFA_NOTIFICATION, DUMMY_DEVICE_ID
-from .const import VERIFICATION_CODE, TOKEN, TOKEN_EXPIRE_AT, DOMAIN
+from .const import VERIFICATION_CODE, EUFY_TOKEN, EUFY_TOKEN_EXPIRE_AT, EUFY_DOMAIN
 
 from eufySecurityApi.api import Api, LoginException
 
@@ -8,18 +8,17 @@ import voluptuous as vol
 import logging
 
 _LOGGER = logging.getLogger(__name__)
+
 class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    # def __init__(self):
-    #     super.__init__()
-    #     self.eufyApi = None
+    VERSION = 1
+    def init_step(self):
+        _LOGGER.info('init_step')
+        self.eufyApi = None
+
     async def async_step_user(self, info):
-        if('eufyApi' not in self.__dict__):
-            self.eufyApi = None
-        if(info is not None and info.get(VERIFICATION_CODE)):
-            return self.async_abort(reason="not_supported")
-        elif(info is not None):
-            if(info.get(TFA) == TFA_NONE):
-                info.set(TFA, TFA_EMAIL)
+        _LOGGER.debug('step_user: start')
+        if(info is not None):
+            _LOGGER.debug('step_user: info')
             self.eufyApi = Api(
                 username=info.get(EMAIL), 
                 password=info.get(PASSWORD), 
@@ -27,25 +26,24 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
             )
             try:
                 response = self.eufyApi.authenticate()
+                _LOGGER.debug('step_user: response %s' % response)
                 if(response == 'OK'):
+                    _LOGGER.info('step_user: token %s, expire %s, domain %s ' % (self.eufyApi.token, self.eufyApi.token_expire_at, self.eufyApi.domain))
                     return self.async_create_entry(title="Eufy Security", data={
-                        TOKEN: self.eufyApi.token,
-                        TOKEN_EXPIRE_AT: self.eufyApi.token_expire_at,
-                        DOMAIN: self.eufyApi.domain
+                        EUFY_TOKEN: self.eufyApi.token,
+                        EUFY_TOKEN_EXPIRE_AT: self.eufyApi.token_expire_at,
+                        EUFY_DOMAIN: self.eufyApi.domain
                     })
-                elif('send_verify_code'):
-                    return self.async_show_form(
-                    step_id="user", data_schema=vol.Schema({
-                        vol.Required(VERIFICATION_CODE): str
-                    })
-                )
-            except LoginException as e:
+                else:
+                    return self.async_abort(reason="login_error")
+            # except LoginException as e:
+            #     _LOGGER.exception(e)
+            #     return self.async_abort(reason="login_error")
+            except Exception as e:
                 _LOGGER.exception(e)
                 return self.async_abort(reason="login_error")
         else:
-            await self.async_set_unique_id(DUMMY_DEVICE_ID)
-            self._abort_if_unique_id_configured()
-
+            _LOGGER.debug('step_user: show form')
             return self.async_show_form(
                 step_id="user", data_schema=vol.Schema({
                     vol.Required(EMAIL): str, 

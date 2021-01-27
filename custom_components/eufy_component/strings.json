@@ -1,0 +1,23 @@
+{
+    "options": {
+        "step": {
+            "init": {
+                "description": "Eufy Security Integration",
+                "data": {}
+            }
+        }
+    },
+    "config": {
+        "step": {
+            "user": {
+                "title": "Eufy Security Integration",
+                "description": "Enter the following information to perform login on Eufy System:",
+                "data":{
+                    "Tfa": "Two factor authentication method",
+                    "Email": "Email",
+                    "Password": "Password"
+                }
+            }
+        }
+    }
+}

@@ -1,5 +1,5 @@
 from homeassistant import config_entries
-from .const import DOMAIN, PASSWORD, EMAIL, TFA, TFA_NONE, TFA_EMAIL, TFA_SMS, TFA_NOTIFICATION, DUMMY_DEVICE_ID, 
+from .const import DOMAIN, PASSWORD, EMAIL, TFA, TFA_NONE, TFA_EMAIL, TFA_SMS, TFA_NOTIFICATION, DUMMY_DEVICE_ID
 from .const import VERIFICATION_CODE, TOKEN, TOKEN_EXPIRE_AT, DOMAIN
 
 from eufySecurityApi.api import Api, LoginException

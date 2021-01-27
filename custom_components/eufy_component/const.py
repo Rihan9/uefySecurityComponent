@@ -1,0 +1,1 @@
+DOMAIN = "eufy_component"

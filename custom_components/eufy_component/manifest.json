@@ -1,0 +1,9 @@
+{
+  "codeowners": ["@rihan9"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/Rihan9/uefySecurityComponent",
+  "domain": "eufy_component",
+  "name": "Eufy Component",
+  "requirements": []
+}

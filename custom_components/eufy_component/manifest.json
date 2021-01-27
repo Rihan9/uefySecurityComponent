@@ -5,5 +5,7 @@
   "documentation": "https://github.com/Rihan9/uefySecurityComponent",
   "domain": "eufy_component",
   "name": "Eufy Component",
-  "requirements": []
+  "requirements": [
+    "uefy-security-api-rihan==0.0.1"
+  ]
 }

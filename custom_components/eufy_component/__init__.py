@@ -20,7 +20,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         token_expire_at=entry.data.get(EUFY_TOKEN_EXPIRE_AT), 
         domain=entry.data.get(EUFY_DOMAIN)
     )
-    EufyApi.update()
+    await EufyApi.update()
     for device_sn in EufyApi.devices:
         _LOGGER.info('device_sn: %s, name: %s' % (device_sn, EufyApi.devices.get(device_sn).name))
 

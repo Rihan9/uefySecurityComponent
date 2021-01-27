@@ -14,10 +14,11 @@ async def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
     return True
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
+    entry.data
     EufyApi = Api(
-        token=entry.get(EUFY_TOKEN), 
-        token_expire_at=entry.get(EUFY_TOKEN_EXPIRE_AT), 
-        domain=entry.get(EUFY_DOMAIN)
+        token=entry.data.get(EUFY_TOKEN), 
+        token_expire_at=entry.data.get(EUFY_TOKEN_EXPIRE_AT), 
+        domain=entry.data.get(EUFY_DOMAIN)
     )
     EufyApi.update()
     for device_sn in EufyApi.devices:

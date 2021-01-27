@@ -39,8 +39,7 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
             # except LoginException as e:
             #     _LOGGER.exception(e)
             #     return self.async_abort(reason="login_error")
-            except Exception as e:
-                _LOGGER.exception(e)
+            except:
                 return self.async_abort(reason="login_error")
         else:
             _LOGGER.debug('step_user: show form')

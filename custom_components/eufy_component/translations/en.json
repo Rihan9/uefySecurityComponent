@@ -10,6 +10,13 @@
                     "Email": "Email",
                     "Password": "Password"
                 }
+            },
+            "tfa": {
+                "title": "Eufy Security Integration",
+                "description": "Enter the verification code send to you:",
+                "data": {
+                    "VC": "Verification Code"
+                }
             }
         }
     },

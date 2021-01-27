@@ -20,6 +20,10 @@
             }
         }
     },
-    "error": {},
-    "abort": {}
+    "error": {
+        "login_error": "something went wrong"
+    },
+    "abort": {
+        "not_supported": "two factor authentication is currently nnot supported"
+    }
 }

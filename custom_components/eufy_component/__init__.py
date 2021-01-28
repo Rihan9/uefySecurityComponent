@@ -9,6 +9,7 @@ from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
     UpdateFailed,
 )
+
 from eufySecurityApi.api import Api
 from .const import EUFY_TOKEN, EUFY_TOKEN_EXPIRE_AT, EUFY_DOMAIN, DOMAIN, ENTITY_TYPE_BATTERY, ENTITY_TYPE_MOTION_SENSOR, HASS_EUFY_API
 import logging
@@ -66,11 +67,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         _LOGGER.info('device_sn: %s, name: %s' % (device_sn, EufyApi.devices.get(device_sn).name))
         if(EufyApi.devices[device_sn].hasbattery):
             hass.async_create_task(
-                hass.helpers.discovery.async_load_platform(hass, 'sensor', DOMAIN, {}, {'sn': device_sn, 'type': ENTITY_TYPE_BATTERY})
+                hass.helpers.discovery.async_load_platform('sensor', DOMAIN, {'sn': device_sn, 'type': ENTITY_TYPE_BATTERY}, {})
             )
         if(EufyApi.devices[device_sn].isMotionSensor):
             hass.async_create_task(
-                hass.helpers.discovery.async_load_platform(hass, 'sensor', DOMAIN, {}, {'sn': device_sn, 'type': ENTITY_TYPE_MOTION_SENSOR})
+                hass.helpers.discovery.async_load_platform('sensor', DOMAIN, {'sn': device_sn, 'type': ENTITY_TYPE_MOTION_SENSOR}, {})
             )
             
         pass

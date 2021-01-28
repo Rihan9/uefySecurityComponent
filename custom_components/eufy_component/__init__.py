@@ -56,22 +56,32 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     for station_sn in EufyApi.stations:
         station = EufyApi.stations[station_sn]
         device_registry.async_get_or_create(
-            config_entry_id=station_sn,
             identifiers={(DOMAIN, station_sn)},
             manufacturer="Eufy",
             name=station.name,
             model=station.model,
             sw_version=station.PROP_MAIN_SW_VERSION,
+            config_entry_id=entry.unique_id
         )
     for device_sn in EufyApi.devices:
-        _LOGGER.info('device_sn: %s, name: %s' % (device_sn, EufyApi.devices.get(device_sn).name))
+        device = EufyApi.devices[device_sn]
+        _LOGGER.info('device_sn: %s, name: %s' % (device_sn, device.name))
+        # device_registry.async_get_or_create(
+        #     config_entry_id=device_sn,
+        #     identifiers={(DOMAIN, device_sn)},
+        #     manufacturer="Eufy",
+        #     name=device.name,
+        #     model=device.model,
+        #     sw_version=device.PROP_MAIN_SW_VERSION,
+        #     config_entry_id=config_entry.unique_id
+        # )
         if(EufyApi.devices[device_sn].hasbattery):
             hass.async_create_task(
-                hass.helpers.discovery.async_load_platform('sensor', DOMAIN, {'sn': device_sn, 'type': ENTITY_TYPE_BATTERY}, entry)
+                hass.helpers.discovery.async_load_platform('sensor', DOMAIN, {'sn': device_sn, 'type': ENTITY_TYPE_BATTERY, 'config_entry_id':entry.unique_id}, entry)
             )
         if(EufyApi.devices[device_sn].isMotionSensor):
             hass.async_create_task(
-                hass.helpers.discovery.async_load_platform('binary_sensor', DOMAIN, {'sn': device_sn, 'type': ENTITY_TYPE_MOTION_SENSOR}, entry)
+                hass.helpers.discovery.async_load_platform('binary_sensor', DOMAIN, {'sn': device_sn, 'type': ENTITY_TYPE_MOTION_SENSOR, 'config_entry_id':entry.unique_id}, entry)
             )
             
         pass

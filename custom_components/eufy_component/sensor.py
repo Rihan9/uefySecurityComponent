@@ -15,7 +15,7 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
         ENTITY_TYPE_BATTERY: BatterySensor
     }
     await async_add_devices([
-        typeMap[config_entry['type']](EufyApi, EufyApi.devices[config_entry['sn']])
+        typeMap[config_entry['type']](EufyApi, EufyApi.devices[config_entry['sn']], config_entry['config_entry_id'])
     ])
     """Set up entry."""
 
@@ -29,7 +29,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
         ENTITY_TYPE_BATTERY: BatterySensor
     }
     add_entities([
-        typeMap[discovery_info['type']](EufyApi, EufyApi.devices[discovery_info['sn']])
+        typeMap[discovery_info['type']](EufyApi, EufyApi.devices[discovery_info['sn']], discovery_info['config_entry_id'])
     ])
 
 

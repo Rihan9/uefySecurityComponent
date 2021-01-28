@@ -1,25 +1,31 @@
 from .const import DOMAIN, SUBSCRIBE_PROPERTY, DEVICE_STATE
 from homeassistant.core import callback
 from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC
 
 class BaseDevice(Entity):
 
-    def __init__(self, api, device):
+    def __init__(self, api, device, config_entry_id):
         self._api = api
         self._device = device
+        self._config_entry_id = config_entry_id
 
     @property
     def device_info(self):
         """Return a device description for device registry."""
 
         return {
-            "connections": self._device.station_sn,
-            "identifiers": self._device.serial,
+            "connections": [],
+            "identifiers": {
+                # Serial numbers are unique identifiers within a specific domain
+                (DOMAIN, self._device.serial)
+            },
             "manufacturer": 'Eufy',
             "model": self._device.model,
             "name": self._device.name,
             "sw_version": self._device.PROP_MAIN_SW_VERSION,
-            "via_device": (DOMAIN, self._device.station_sn),
+            "via_device": (DOMAIN, self._config_entry_id),
+            "config_entry_id": self._config_entry_id
         }
 
     async def async_added_to_hass(self):

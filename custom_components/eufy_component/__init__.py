@@ -50,7 +50,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     
     _LOGGER.info('setting up devices and entities...')
-    
+
     device_registry = await dr.async_get_registry(hass)
     for station_sn in EufyApi.stations:
         station = EufyApi.stations[station_sn]
@@ -66,15 +66,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         _LOGGER.info('device_sn: %s, name: %s' % (device_sn, EufyApi.devices.get(device_sn).name))
         if(EufyApi.devices[device_sn].hasbattery):
             hass.async_create_task(
-                hass.config_entries.async_forward_entry_setup(
-                    {'sn': device_sn, 'type': ENTITY_TYPE_BATTERY}, "sensor"
-                )
+                hass.helpers.discovery.async_load_platform(hass, 'sensor', DOMAIN, {}, {'sn': device_sn, 'type': ENTITY_TYPE_BATTERY})
             )
         if(EufyApi.devices[device_sn].isMotionSensor):
             hass.async_create_task(
-                hass.config_entries.async_forward_entry_setup(
-                    {'sn': device_sn, 'type': ENTITY_TYPE_MOTION_SENSOR}, "binary_sensor"
-                )
+                hass.helpers.discovery.async_load_platform(hass, 'sensor', DOMAIN, {}, {'sn': device_sn, 'type': ENTITY_TYPE_MOTION_SENSOR})
             )
             
         pass

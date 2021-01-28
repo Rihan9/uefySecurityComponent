@@ -22,9 +22,9 @@ async def async_setup(hass: core.HomeAssistant, config: dict) -> bool:
     return True
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
-    if entry.unique_id is None and entry.data.unique_id is not None:
+    if entry.unique_id is None and entry.data.data['unique_id'] is not None:
         await hass.config_entries.async_update_entry(
-            entry, unique_id=entry.data.unique_id, data=entry.data
+            entry, unique_id=entry.data['unique_id'], data=entry.data
         )
     if DOMAIN not in hass.data:
         hass.data[DOMAIN] = {}

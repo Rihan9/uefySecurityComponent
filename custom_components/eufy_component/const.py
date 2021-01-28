@@ -1,3 +1,5 @@
+from eufySecurityApi.const import PARAM_TYPE, DEVICE_STATE
+
 DOMAIN = "eufy_component"
 DUMMY_DEVICE_ID = 'DUMMY_123'
 
@@ -14,3 +16,14 @@ TFA_NOTIFICATION = 'Notification'
 EUFY_TOKEN = 'Token'
 EUFY_TOKEN_EXPIRE_AT = 'Token_expire_at'
 EUFY_DOMAIN = 'Domain'
+
+ENTITY_TYPE_BATTERY = 'Battery'
+ENTITY_TYPE_MOTION_SENSOR = 'Motion_Sensor'
+
+HASS_EUFY_API = 'Api'
+
+SUBSCRIBE_PROPERTY = [
+    PARAM_TYPE.BATTERY_LEVEL,
+    PARAM_TYPE.PROP_STATUS,
+    PARAM_TYPE.PROP_EVENT_NUM
+]

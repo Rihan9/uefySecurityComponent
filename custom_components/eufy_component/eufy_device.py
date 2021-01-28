@@ -33,7 +33,7 @@ class BaseDevice(Entity):
     @property
     def available(self):
         """Return True if device is available."""
-        return self._device.state in [
+        return self._device.status in [
             DEVICE_STATE.ONLINE
         ]
 

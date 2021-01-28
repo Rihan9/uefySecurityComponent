@@ -37,7 +37,7 @@ class BatterySensor(BaseDevice):
 
     @property
     def state(self):
-        self._device.battery_level
+        return self._device.battery_level
     
     @property
     def unit_of_measurement(self):

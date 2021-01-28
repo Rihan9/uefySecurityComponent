@@ -37,7 +37,7 @@ class MotionSensor(BaseDevice):
 
     @property
     def is_on(self):
-        self._device.state == 'motion detected'
+        return self._device.state == 'motion detected'
     
     @property
     def device_class(self):

@@ -1,5 +1,6 @@
 from .const import HASS_EUFY_API, DOMAIN, ENTITY_TYPE_MOTION_SENSOR
 from .eufy_device import BaseDevice
+import logging
 
 from homeassistant.components.binary_sensor import (
     DEVICE_CLASS_MOTION

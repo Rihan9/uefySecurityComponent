@@ -23,7 +23,7 @@ class BaseDevice(Entity):
         }
 
     async def async_added_to_hass(self):
-        self._api.subscribe(SUBSCRIBE_PROPERTY, self.async_update_callback)
+        self._device.subscribe(SUBSCRIBE_PROPERTY, self.async_update_callback)
 
     
     @callback

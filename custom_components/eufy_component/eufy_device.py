@@ -46,3 +46,7 @@ class BaseDevice(Entity):
     def should_poll(self):
         """No polling needed."""
         return False
+
+    @property
+    def unique_id(self):
+        return self._device.name.replace(' ', '_').lower()

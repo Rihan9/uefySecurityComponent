@@ -32,7 +32,8 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     return self.async_create_entry(title="Eufy Security", data={
                         EUFY_TOKEN: self.eufyApi.token,
                         EUFY_TOKEN_EXPIRE_AT: self.eufyApi.token_expire_at,
-                        EUFY_DOMAIN: self.eufyApi.domain
+                        EUFY_DOMAIN: self.eufyApi.domain,
+                        'unique_id': self.eufyApi.userId
                     })
                 else:
                     return self.async_abort(reason="login_error")

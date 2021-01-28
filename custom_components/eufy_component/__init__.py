@@ -32,6 +32,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.data[DOMAIN][HASS_EUFY_API] = EufyApi
     # await EufyApi.update()
     
+    _LOGGER.info('setting up coordinator...')
     coordinator = DataUpdateCoordinator(
         hass,
         _LOGGER,
@@ -45,6 +46,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     
     hass.data[DOMAIN]['Coordinator'] = coordinator
 
+    await coordinator.async_refresh()
+
+    
+    _LOGGER.info('setting up devices and entities...')
+    
     device_registry = await dr.async_get_registry(hass)
     for station_sn in EufyApi.stations:
         station = EufyApi.stations[station_sn]

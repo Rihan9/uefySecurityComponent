@@ -38,7 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         token_expire_at=entry.data.get(EUFY_TOKEN_EXPIRE_AT), 
         domain=entry.data.get(EUFY_DOMAIN)
     )
-    hass.data[DOMAIN][HASS_EUFY_API][entry.unique_id] = EufyApi
+    hass.data[DOMAIN][entry.unique_id] = EufyApi
     # await EufyApi.update()
     
     _LOGGER.info('setting up coordinator...')
@@ -75,14 +75,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     
     hass.async_create_task(
         hass.config_entries.async_forward_entry_setup(
-            config_entry, "sensor"
+            entry, "sensor"
         )
     )
     hass.async_create_task(
         hass.config_entries.async_forward_entry_setup(
-            config_entry, "binary_sensor"
+            entry, "binary_sensor"
         )
     )
-            
-        pass
     return True

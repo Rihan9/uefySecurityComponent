@@ -10,7 +10,7 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass, config_entry, async_add_devices):
     
     """Set up the sensor platform."""
-    EufyApi = hass.data[DOMAIN][HASS_EUFY_API]
+    EufyApi = hass.data[DOMAIN][config_entry.unique_id]
     for device_sn in EufyApi.devices:
         device = EufyApi.devices[device_sn]
         if(device.hasbattery):

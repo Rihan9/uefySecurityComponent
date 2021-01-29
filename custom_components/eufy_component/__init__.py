@@ -12,6 +12,7 @@ from homeassistant.helpers.update_coordinator import (
 )
 
 from eufySecurityApi.api import Api
+from eufySecurityApi.const import PARAM_TYPE
 from .const import EUFY_TOKEN, EUFY_TOKEN_EXPIRE_AT, EUFY_DOMAIN, DOMAIN, ENTITY_TYPE_BATTERY, ENTITY_TYPE_MOTION_SENSOR, HASS_EUFY_API
 import logging
 
@@ -67,9 +68,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             manufacturer="Eufy",
             name=station.name,
             model=station.model,
-            sw_version=station.main_sw_version,
+            sw_version=station.attribute[PARAM_TYPE.PROP_MAIN_SW_VERSION],
             config_entry_id=entry.unique_id,
-            connections={(CONNECTION_NETWORK_MAC, station.wifi_mac)},
+            connections={(CONNECTION_NETWORK_MAC, station.attribute[PARAM_TYPE.PROP_WIFI_MAC])},
         )
     for device_sn in EufyApi.devices:
         device = EufyApi.devices[device_sn]
@@ -80,10 +81,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             manufacturer="Eufy",
             name=device.name,
             model=device.model,
-            sw_version=device.main_sw_version,
+            sw_version=device.attribute[PARAM_TYPE.PROP_MAIN_SW_VERSION],
             config_entry_id=entry.unique_id,
-            connections={(CONNECTION_NETWORK_MAC, device.wifi_mac)},
-            via_device={(CONNECTION_NETWORK_MAC, parentStation.wifi_mac)},
+            connections={(CONNECTION_NETWORK_MAC, device.attribute[PARAM_TYPE.PROP_WIFI_MAC])},
+            via_device={(CONNECTION_NETWORK_MAC, parentStation.attribute[PARAM_TYPE.PROP_WIFI_MAC])},
         )
         # device_registry.async_get_or_create(
         #     config_entry_id=device_sn,

@@ -13,7 +13,7 @@ from homeassistant.helpers.update_coordinator import (
 
 from eufySecurityApi.api import Api
 from eufySecurityApi.const import PARAM_TYPE
-from .const import EUFY_TOKEN, EUFY_TOKEN_EXPIRE_AT, EUFY_DOMAIN, DOMAIN, ENTITY_TYPE_BATTERY, ENTITY_TYPE_MOTION_SENSOR, HASS_EUFY_API
+from .const import EUFY_TOKEN, EUFY_TOKEN_EXPIRE_AT, EUFY_DOMAIN, DOMAIN, ENTITY_TYPE_BATTERY, ENTITY_TYPE_MOTION_SENSOR, HASS_EUFY_API, USED_ENTITIES_DOMAIN
 import logging
 
 _LOGGER = logging.getLogger(__name__)
@@ -74,14 +74,21 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             connections={(CONNECTION_NETWORK_MAC, station.wifi_mac)},
         )
     
-    hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(
-            entry, "sensor"
+    for entity_domain in USED_ENTITIES_DOMAIN:
+        hass.async_create_task(
+            hass.config_entries.async_forward_entry_setup(
+                entry, entity_domain
+            )
         )
-    )
-    hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(
-            entry, "binary_sensor"
-        )
-    )
     return True
+
+
+async def async_unload_entry(hass, entry):
+    for entity_domain in USED_ENTITIES_DOMAIN:
+        await hass.config_entries.async_forward_entry_unload(entry, entity_domain)
+
+    device_registry = await dr.async_get_registry(hass)
+    for hass_device in dr.async_entries_for_config_entry(device_registry, entry.unique_id):
+        device_registry.async_remove_device(hass_device.id)
+    hass.data[DOMAIN] = {}
+    

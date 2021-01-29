@@ -7,6 +7,8 @@ from homeassistant.components.binary_sensor import (
 )
 from homeassistant.const import STATE_OFF, STATE_ON
 
+from homeassistant.helpers import entity_registry as er
+
 _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass, config_entry, async_add_devices):
     
@@ -23,19 +25,16 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
     if(len(entities) > 0):
         async_add_devices(entities)  
 
-def setup_platform(hass, config, add_entities, discovery_info=None):
-    """Set up the sensor platform."""
-    EufyApi = hass.data[DOMAIN][HASS_EUFY_API]
-    _LOGGER.debug('config: %s' % config )
-    _LOGGER.debug('discovery_info: %s' % discovery_info )
-    _LOGGER.debug('EufyApi: %s' % EufyApi )
-    typeMap = {
-        ENTITY_TYPE_MOTION_SENSOR: MotionSensor
-    }
-    add_entities([
-        typeMap[discovery_info['type']](EufyApi, EufyApi.devices[discovery_info['sn']], discovery_info['config_entry_id'])
-    ])
+async def async_remove_entry(hass, entry) -> None:
+    EufyApi = hass.data[DOMAIN][entry.unique_id]['Api']
 
+    entity_registry = await er.async_get_registry(hass)
+    for device_sn in EufyApi.devices:
+        device = EufyApi.devices[device_sn]
+        if(device.isMotionSensor):
+            entity_id = entity_registry.async_get_entity_id(DOMAIN, 'bynary_sensor', device.serial + '_' + DEVICE_CLASS_MOTION.replace(' ', '_').lower())
+            if(entity_id is not None):
+                entity_registry.async_remove(entity_id)
 
 class MotionSensor(BaseDevice):
 

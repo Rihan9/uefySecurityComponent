@@ -42,6 +42,9 @@ class BaseDevice(CoordinatorEntity, Entity):
         _LOGGER.info('api call homeassistant for update')
         self.async_write_ha_state()
 
+    async def async_will_remove_from_hass(self):
+        self._device.unsubscribe(self.async_update_callback)
+
     @property
     def available(self):
         """Return True if device is available."""

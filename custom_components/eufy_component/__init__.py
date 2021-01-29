@@ -68,9 +68,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             manufacturer="Eufy",
             name=station.name,
             model=station.model,
-            sw_version=station.attribute[PARAM_TYPE.PROP_MAIN_SW_VERSION],
+            sw_version=station.main_sw_version,
             config_entry_id=entry.unique_id,
-            connections={(CONNECTION_NETWORK_MAC, station.attribute[PARAM_TYPE.PROP_WIFI_MAC])},
+            connections={(CONNECTION_NETWORK_MAC, station.wifi_mac)},
         )
     for device_sn in EufyApi.devices:
         device = EufyApi.devices[device_sn]
@@ -81,20 +81,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             manufacturer="Eufy",
             name=device.name,
             model=device.model,
-            sw_version=device.attribute[PARAM_TYPE.PROP_MAIN_SW_VERSION],
+            sw_version=device.main_sw_version,
             config_entry_id=entry.unique_id,
-            connections={(CONNECTION_NETWORK_MAC, device.attribute[PARAM_TYPE.PROP_WIFI_MAC])},
-            via_device={(CONNECTION_NETWORK_MAC, parentStation.attribute[PARAM_TYPE.PROP_WIFI_MAC])},
+            connections={(CONNECTION_NETWORK_MAC, device.wifi_mac)},
+            via_device={(CONNECTION_NETWORK_MAC, parentStation.wifi_mac)},
         )
-        # device_registry.async_get_or_create(
-        #     config_entry_id=device_sn,
-        #     identifiers={(DOMAIN, device_sn)},
-        #     manufacturer="Eufy",
-        #     name=device.name,
-        #     model=device.model,
-        #     sw_version=device.PROP_MAIN_SW_VERSION,
-        #     config_entry_id=config_entry.unique_id
-        # )
         # if(EufyApi.devices[device_sn].hasbattery):
         #     hass.async_create_task(
         #         hass.helpers.discovery.async_load_platform('sensor', DOMAIN, {'sn': device_sn, 'type': ENTITY_TYPE_BATTERY, 'config_entry_id':entry.unique_id}, entry)

@@ -17,7 +17,7 @@ class BaseDevice(Entity):
         """Return a device description for device registry."""
         parentStation = self._device.api.stations[self._device.station_sn]
         return {
-            "connections": {(CONNECTION_NETWORK_MAC, self._device.attribute[PARAM_TYPE.PROP_WIFI_MAC])},
+            "connections": {(CONNECTION_NETWORK_MAC, self._device.wifi_mac)},
             "identifiers": {
                 # Serial numbers are unique identifiers within a specific domain
                 (DOMAIN, self._device.serial)
@@ -25,8 +25,8 @@ class BaseDevice(Entity):
             "manufacturer": 'Eufy',
             "model": self._device.model,
             "name": self._device.name,
-            "sw_version": self._device.attribute[PARAM_TYPE.PROP_MAIN_SW_VERSION],
-            "via_device": {(CONNECTION_NETWORK_MAC, parentStation.attribute[PARAM_TYPE.PROP_WIFI_MAC])}
+            "sw_version": self._device.main_sw_version,
+            "via_device": {(CONNECTION_NETWORK_MAC, parentStation.wifi_mac)}
         }
 
     async def async_added_to_hass(self):
@@ -57,4 +57,4 @@ class BaseDevice(Entity):
 
     @property
     def unique_id(self):
-        return self._device.serial
+        return self._device.serial + '_' + self.device_class.replace(' ', '_').lower()

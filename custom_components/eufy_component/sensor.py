@@ -47,7 +47,4 @@ class BatterySensor(BaseDevice):
     def device_class(self):
         return DEVICE_CLASS_BATTERY
     
-    @property
-    def unique_id(self):
-        return self._device.name.replace(' ', '_').lower() + '_battery'
     

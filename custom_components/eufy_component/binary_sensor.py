@@ -43,6 +43,3 @@ class MotionSensor(BaseDevice):
     def device_class(self):
         return DEVICE_CLASS_MOTION
     
-    @property
-    def unique_id(self):
-        return self._device.name.replace(' ', '_').lower() + '_motion_sensor'

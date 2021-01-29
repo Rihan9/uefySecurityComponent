@@ -20,7 +20,7 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
         if(device.hasbattery):
             entities.append(BatterySensor(EufyApi, device, coordinator))
     if(len(entities) > 0):
-        await async_add_devices(entities)        
+        async_add_devices(entities)        
     """Set up entry."""
 
 class BatterySensor(BaseDevice):

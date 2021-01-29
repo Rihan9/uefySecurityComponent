@@ -24,8 +24,7 @@ class BaseDevice(Entity):
             "model": self._device.model,
             "name": self._device.name,
             "sw_version": self._device.PROP_MAIN_SW_VERSION,
-            "via_device": (DOMAIN, self._config_entry_id),
-            "config_entry_id": self._config_entry_id
+            "via_device": (DOMAIN, self._config_entry_id)
         }
 
     async def async_added_to_hass(self):
@@ -39,9 +38,10 @@ class BaseDevice(Entity):
     @property
     def available(self):
         """Return True if device is available."""
-        return self._device.status in [
-            DEVICE_STATE.ONLINE
-        ]
+        return True
+        # return self._device.status in [
+        #     DEVICE_STATE.ONLINE
+        # ]
 
     @property
     def name(self):

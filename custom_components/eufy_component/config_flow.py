@@ -28,6 +28,10 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 response = await self.eufyApi.authenticate()
                 _LOGGER.debug('step_user: response %s' % response)
                 if(response == 'OK'):
+                    
+                    await self.async_set_unique_id(self.eufyApi.userId)
+                    self._abort_if_unique_id_configured()
+
                     _LOGGER.info('step_user: token %s, expire %s, domain %s ' % (self.eufyApi.token, self.eufyApi.token_expire_at, self.eufyApi.domain))
                     return self.async_create_entry(title="Eufy Security", data={
                         EUFY_TOKEN: self.eufyApi.token,

@@ -3,6 +3,7 @@ from datetime import timedelta
 from homeassistant import core
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
@@ -66,19 +67,23 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             manufacturer="Eufy",
             name=station.name,
             model=station.model,
-            sw_version=station.PROP_MAIN_SW_VERSION,
-            config_entry_id=entry.unique_id
+            sw_version=station.main_sw_version,
+            config_entry_id=entry.unique_id,
+            connections={(CONNECTION_NETWORK_MAC, station.wifi_mac)},
         )
     for device_sn in EufyApi.devices:
         device = EufyApi.devices[device_sn]
+        parentStation = EufyApi.stations[device.station_sn]
         _LOGGER.info('device_sn: %s, name: %s' % (device_sn, device.name))
         device_registry.async_get_or_create(
             identifiers={(DOMAIN, device_sn)},
             manufacturer="Eufy",
             name=device.name,
             model=device.model,
-            sw_version=device.PROP_MAIN_SW_VERSION,
-            config_entry_id=entry.unique_id
+            sw_version=device.main_sw_version,
+            config_entry_id=entry.unique_id,
+            connections={(CONNECTION_NETWORK_MAC, device.wifi_mac)},
+            via_device={(CONNECTION_NETWORK_MAC, parentStation.wifi_mac)},
         )
         # device_registry.async_get_or_create(
         #     config_entry_id=device_sn,

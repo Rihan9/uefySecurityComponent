@@ -11,13 +11,12 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
     
     """Set up the sensor platform."""
     EufyApi = hass.data[DOMAIN][HASS_EUFY_API]
-    typeMap = {
-        ENTITY_TYPE_MOTION_SENSOR: MotionSensor
-    }
-    await async_add_devices([
-        typeMap[config_entry['type']](EufyApi, EufyApi.devices[config_entry['sn']], config_entry['config_entry_id'])
-    ])
-    """Set up entry."""
+    for device_sn in EufyApi.devices:
+        device = EufyApi.devices[device_sn]
+        if(device.isMotionSensor):
+            await async_add_devices([
+                MotionSensor(EufyApi, device, config_entry.unique_id)
+            ])
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the sensor platform."""

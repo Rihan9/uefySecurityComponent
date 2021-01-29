@@ -38,7 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         token_expire_at=entry.data.get(EUFY_TOKEN_EXPIRE_AT), 
         domain=entry.data.get(EUFY_DOMAIN)
     )
-    hass.data[DOMAIN][HASS_EUFY_API] = EufyApi
+    hass.data[DOMAIN][HASS_EUFY_API][entry.unique_id] = EufyApi
     # await EufyApi.update()
     
     _LOGGER.info('setting up coordinator...')
@@ -72,28 +72,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             config_entry_id=entry.unique_id,
             connections={(CONNECTION_NETWORK_MAC, station.wifi_mac)},
         )
-    for device_sn in EufyApi.devices:
-        device = EufyApi.devices[device_sn]
-        parentStation = EufyApi.stations[device.station_sn]
-        _LOGGER.info('device_sn: %s, name: %s' % (device_sn, device.name))
-        device_registry.async_get_or_create(
-            identifiers={(DOMAIN, device_sn)},
-            manufacturer="Eufy",
-            name=device.name,
-            model=device.model,
-            sw_version=device.main_sw_version,
-            config_entry_id=entry.unique_id,
-            connections={(CONNECTION_NETWORK_MAC, device.wifi_mac)},
-            via_device={(CONNECTION_NETWORK_MAC, parentStation.wifi_mac)},
+    
+    hass.async_create_task(
+        hass.config_entries.async_forward_entry_setup(
+            config_entry, "sensor"
         )
-        # if(EufyApi.devices[device_sn].hasbattery):
-        #     hass.async_create_task(
-        #         hass.helpers.discovery.async_load_platform('sensor', DOMAIN, {'sn': device_sn, 'type': ENTITY_TYPE_BATTERY, 'config_entry_id':entry.unique_id}, entry)
-        #     )
-        # if(EufyApi.devices[device_sn].isMotionSensor):
-        #     hass.async_create_task(
-        #         hass.helpers.discovery.async_load_platform('binary_sensor', DOMAIN, {'sn': device_sn, 'type': ENTITY_TYPE_MOTION_SENSOR, 'config_entry_id':entry.unique_id}, entry)
-        #     )
+    )
+    hass.async_create_task(
+        hass.config_entries.async_forward_entry_setup(
+            config_entry, "binary_sensor"
+        )
+    )
             
         pass
     return True

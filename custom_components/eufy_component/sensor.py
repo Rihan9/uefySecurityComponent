@@ -11,27 +11,13 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
     
     """Set up the sensor platform."""
     EufyApi = hass.data[DOMAIN][HASS_EUFY_API]
-    typeMap = {
-        ENTITY_TYPE_BATTERY: BatterySensor
-    }
-    await async_add_devices([
-        typeMap[config_entry['type']](EufyApi, EufyApi.devices[config_entry['sn']], config_entry['config_entry_id'])
-    ])
+    for device_sn in EufyApi.devices:
+        device = EufyApi.devices[device_sn]
+        if(device.hasbattery):
+            await async_add_devices([
+                BatterySensor(EufyApi, device, config_entry.unique_id)
+            ])
     """Set up entry."""
-
-def setup_platform(hass, config, add_entities, discovery_info=None):
-    """Set up the sensor platform."""
-    EufyApi = hass.data[DOMAIN][HASS_EUFY_API]
-    _LOGGER.debug('config: %s' % config )
-    _LOGGER.debug('discovery_info: %s' % discovery_info )
-    _LOGGER.debug('EufyApi: %s' % EufyApi )
-    typeMap = {
-        ENTITY_TYPE_BATTERY: BatterySensor
-    }
-    add_entities([
-        typeMap[discovery_info['type']](EufyApi, EufyApi.devices[discovery_info['sn']], discovery_info['config_entry_id'])
-    ])
-
 
 class BatterySensor(BaseDevice):
 

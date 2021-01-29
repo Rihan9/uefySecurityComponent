@@ -17,6 +17,7 @@ class BaseDevice(CoordinatorEntity, Entity):
         super().__init__(coordinator)
         self._api = api
         self._device = device
+        self._device.subscribe(SUBSCRIBE_PROPERTY, self.async_update_callback)
 
     @property
     def device_info(self):
@@ -34,10 +35,6 @@ class BaseDevice(CoordinatorEntity, Entity):
             "sw_version": self._device.main_sw_version,
             "via_device": (CONNECTION_NETWORK_MAC, parentStation.wifi_mac)
         }
-
-    async def async_added_to_hass(self):
-        self._device.subscribe(SUBSCRIBE_PROPERTY, self.async_update_callback)
-        _LOGGER.info('succesfully added to home assistant and subscribed to api')
 
     
     @callback
@@ -57,11 +54,6 @@ class BaseDevice(CoordinatorEntity, Entity):
     def name(self):
         """Return the name of the device."""
         return self._device.name
-
-    @property
-    def should_poll(self):
-        """No polling needed."""
-        return False
 
     @property
     def unique_id(self):

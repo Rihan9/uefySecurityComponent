@@ -8,6 +8,9 @@ from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity
 )
 
+import logging
+
+_LOGGER = logging.getLogger(__name__)
 class BaseDevice(CoordinatorEntity, Entity):
 
     def __init__(self, api, device, coordinator):
@@ -34,10 +37,12 @@ class BaseDevice(CoordinatorEntity, Entity):
 
     async def async_added_to_hass(self):
         self._device.subscribe(SUBSCRIBE_PROPERTY, self.async_update_callback)
+        _LOGGER.info('succesfully added to home assistant and subscribed to api')
 
     
     @callback
     def async_update_callback(self, attributes):
+        _LOGGER.info('api call homeassistant for update')
         self.async_write_ha_state()
 
     @property

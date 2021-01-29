@@ -41,7 +41,6 @@ class MotionSensor(BaseDevice):
 
     @property
     def is_on(self):
-        _LOGGER('MotionSensor: is_on called')
         return self._device.motionDetected
     
     @property

@@ -5,6 +5,7 @@ import logging
 from homeassistant.components.binary_sensor import (
     DEVICE_CLASS_MOTION
 )
+from homeassistant.const import STATE_OFF, STATE_ON
 
 _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass, config_entry, async_add_devices):
@@ -40,9 +41,15 @@ class MotionSensor(BaseDevice):
 
     @property
     def is_on(self):
+        _LOGGER('MotionSensor: is_on called')
         return self._device.motionDetected
     
     @property
     def device_class(self):
         return DEVICE_CLASS_MOTION
+
+    @property
+    def state(self):
+        """Return the state of the binary sensor."""
+        return STATE_ON if self.is_on else STATE_OFF
     

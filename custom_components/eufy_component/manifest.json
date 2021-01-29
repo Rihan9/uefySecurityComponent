@@ -6,6 +6,6 @@
   "domain": "eufy_component",
   "name": "Eufy Component",
   "requirements": [
-    "eufy-security-api-rihan==0.0.7"
+    "eufy-security-api-rihan==0.0.8"
   ]
 }

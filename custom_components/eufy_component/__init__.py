@@ -38,7 +38,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         token_expire_at=entry.data.get(EUFY_TOKEN_EXPIRE_AT), 
         domain=entry.data.get(EUFY_DOMAIN)
     )
-    hass.data[DOMAIN][entry.unique_id] = EufyApi
     # await EufyApi.update()
     
     _LOGGER.info('setting up coordinator...')
@@ -51,9 +50,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         # Polling interval. Will only be polled if there are subscribers.
         update_interval=timedelta(seconds=2),
     )
-
     
-    hass.data[DOMAIN]['Coordinator'] = coordinator
+    hass.data[DOMAIN][entry.unique_id] = {
+        'Api': EufyApi,
+        'coordinator': coordinator
+    }
 
     await coordinator.async_refresh()
 

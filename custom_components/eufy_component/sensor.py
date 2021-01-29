@@ -6,16 +6,19 @@ from homeassistant.const import (
     PERCENTAGE
 )
 
+
+
 _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass, config_entry, async_add_devices):
     
     """Set up the sensor platform."""
-    EufyApi = hass.data[DOMAIN][config_entry.unique_id]
+    EufyApi = hass.data[DOMAIN][config_entry.unique_id]['Api']
+    coordinator = hass.data[DOMAIN][config_entry.unique_id]['coordinator']
     entities = []
     for device_sn in EufyApi.devices:
         device = EufyApi.devices[device_sn]
         if(device.hasbattery):
-            entities.append(BatterySensor(EufyApi, device, config_entry.unique_id))
+            entities.append(BatterySensor(EufyApi, device, coordinator))
     if(len(entities) > 0):
         await async_add_devices(entities)        
     """Set up entry."""

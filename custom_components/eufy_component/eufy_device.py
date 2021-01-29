@@ -4,13 +4,16 @@ from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC
 
 from eufySecurityApi.const import PARAM_TYPE
+from homeassistant.helpers.update_coordinator import (
+    CoordinatorEntity
+)
 
-class BaseDevice(Entity):
+class BaseDevice(CoordinatorEntity, Entity):
 
-    def __init__(self, api, device, config_entry_id):
+    def __init__(self, api, device, coordinator):
+        super().__init__(coordinator)
         self._api = api
         self._device = device
-        self._config_entry_id = config_entry_id
 
     @property
     def device_info(self):

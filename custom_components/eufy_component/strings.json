@@ -11,13 +11,14 @@
                     "Password": "Password"
                 }
             }
+        },
+        "error": {
+            "login_error": "login failed. Incorrect data or user lock out"
+        },
+        "abort": {
+            "not_supported": "two factor authentication is currently not supported",
+            "login_error": "Login failed. TODO",
+            "reauth_successful": "succesfully reauth on Eufy Security"
         }
-    },
-    "error": {
-        "login_error": "something went wrong"
-    },
-    "abort": {
-        "not_supported": "two factor authentication is currently nnot supported",
-        "login_error": "something went wrong"
     }
 }

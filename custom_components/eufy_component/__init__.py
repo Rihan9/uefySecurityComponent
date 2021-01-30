@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from homeassistant import core
 from homeassistant.core import HomeAssistant
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import SOURCE_REAUTH, ConfigEntry
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.update_coordinator import (
@@ -39,6 +39,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         domain=entry.data.get(EUFY_DOMAIN)
     )
     # await EufyApi.update()
+    if(not EufyApi.connected):
+        hass.async_create_task(
+            hass.config_entries.flow.async_init(
+                DOMAIN,
+                context={"source": SOURCE_REAUTH},
+                data=entry.data,
+            )
+        )
+        return False
     
     _LOGGER.info('setting up coordinator...')
     coordinator = DataUpdateCoordinator(
@@ -91,4 +100,6 @@ async def async_unload_entry(hass, entry):
     for hass_device in dr.async_entries_for_config_entry(device_registry, entry.unique_id):
         device_registry.async_remove_device(hass_device.id)
     hass.data[DOMAIN] = {}
+
+    return True
     

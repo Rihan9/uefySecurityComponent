@@ -33,10 +33,13 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
 def make_sensor_from_attribute(api, device, coordinator):
     entities = []
     for attribute in device.attribute:
-        if attribute in PARAM_TYPE_TO_ENTITIES and PARAM_TYPE_TO_ENTITIES[attribute][0] == 'binary_sensor':
+        if attribute in PARAM_TYPE_TO_ENTITIES:
+            p_domain, p_name, p_icon = PARAM_TYPE_TO_ENTITIES[attribute]
+            if(p_domain != 'binary_sensor'):
+                continue
             entities.append(
                 AttributeBinarySensor(
-                    api, device, coordinator, attribute, PARAM_TYPE_TO_ENTITIES[attribute][1], PARAM_TYPE_TO_ENTITIES[attribute][2]
+                    api, device, coordinator, attribute, p_name, p_icon
                 )
             )
     return entities
@@ -62,7 +65,7 @@ async def async_remove_entry(hass, entry) -> None:
 class AttributeBinarySensor(BaseDevice):
 
     def __init__(self, api, device, coordinator, attribute, name, icon='mdi:menu'):
-        super.__init__(self, api, device, coordinator)
+        super().__init__(api, device, coordinator)
         self._attribute = attribute
         self._icon = icon
         self._name = name

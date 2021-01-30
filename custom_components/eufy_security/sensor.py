@@ -51,10 +51,13 @@ async def async_remove_entry(hass, entry) -> None:
 def make_sensor_from_attribute(api, device, coordinator):
     entities = []
     for attribute in device.attribute:
-        if attribute in PARAM_TYPE_TO_ENTITIES and PARAM_TYPE_TO_ENTITIES[attribute][0] == 'sensor':
+        if attribute in PARAM_TYPE_TO_ENTITIES:
+            p_domain, p_name, p_icon = PARAM_TYPE_TO_ENTITIES[attribute]
+            if(p_domain != 'sensor'):
+                continue
             entities.append(
                 AttributeSensor(
-                    api, device, coordinator, attribute, PARAM_TYPE_TO_ENTITIES[attribute][1], PARAM_TYPE_TO_ENTITIES[attribute][2]
+                    api, device, coordinator, attribute, p_name, p_icon
                 )
             )
     return entities
@@ -62,10 +65,10 @@ def make_sensor_from_attribute(api, device, coordinator):
 class AttributeSensor(BaseDevice):
 
     def __init__(self, api, device, coordinator, attribute, name, icon='mdi:menu'):
-        super.__init__(self, api, device, coordinator)
         self._attribute = attribute
         self._icon = icon
         self._name = name
+        super().__init__(api, device, coordinator)
     
     @property
     def name(self):

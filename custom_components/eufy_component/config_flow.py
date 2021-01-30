@@ -22,7 +22,7 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._firstReauthTry = False
     
     async def async_step_reauth(self, info):
-        auth_state = self._login(info.get(CONF_PASSWORD), info.get(CONF_EMAIL), info.get(TFA))
+        auth_state = await self._login(info.get(CONF_PASSWORD), info.get(CONF_EMAIL), info.get(TFA))
         if(auth_state == 'OK'):
             existing_entry = await self.async_set_unique_id(self.eufyApi.userId)
             self.hass.config_entries.async_update_entry(
@@ -54,7 +54,7 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(self, info):
         if(info is not None):
-            auth_state = self._login(info.get(EMAIL), info.get(PASSWORD), info.get(TFA))
+            auth_state = await self._login(info.get(EMAIL), info.get(PASSWORD), info.get(TFA))
             if(auth_state == 'OK'):
                 existing_entry = await self.async_set_unique_id(self.eufyApi.userId)
                 self._abort_if_unique_id_configured()
@@ -131,7 +131,7 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 })
             )
 
-    def _login(self, email, password, tfa):
+    async def _login(self, email, password, tfa):
         self.eufyApi = Api(
             username=email, 
             password=password, 

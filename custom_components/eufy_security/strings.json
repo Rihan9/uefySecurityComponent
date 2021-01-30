@@ -10,10 +10,27 @@
                     "Email": "Email",
                     "Password": "Password"
                 }
+            },
+            "reauth": {
+                "title": "Eufy Security Integration",
+                "description": "Enter the following information to confirm login on Eufy System:",
+                "data": {
+                    "Tfa": "Two factor authentication method",
+                    "Email": "Email",
+                    "Password": "Password"
+                }
+            },
+            "twofactor": {
+                "title": "Eufy Security Integration",
+                "description": "Enter the verification code:",
+                "data": {
+                    "VC": "Verification Code"
+                }
             }
         },
         "error": {
-            "login_error": "login failed. Incorrect data or user lock out"
+            "login_error": "login failed. Incorrect data or user lock out",
+            "verification_code_error": "Verification code is not valid. Please retry"
         },
         "abort": {
             "not_supported": "two factor authentication is currently not supported",

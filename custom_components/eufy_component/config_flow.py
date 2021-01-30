@@ -1,5 +1,5 @@
 from homeassistant import config_entries
-from .const import DOMAIN, PASSWORD, EMAIL, TFA, TFA_NONE, TFA_EMAIL, TFA_SMS, TFA_NOTIFICATION, DUMMY_DEVICE_ID
+from .const import DOMAIN, PASSWORD, EMAIL, TFA, TFA_NONE, TFA_EMAIL, TFA_SMS, TFA_NOTIFICATION
 from .const import VERIFICATION_CODE, EUFY_TOKEN, EUFY_TOKEN_EXPIRE_AT, EUFY_DOMAIN
 
 from eufySecurityApi.api import Api, LoginException
@@ -53,14 +53,14 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
             
 
     async def async_step_user(self, info):
-        if(info is not None):
+        if(info is not None and not info.get('LOGIN_ERROR')):
             auth_state = await self._login(info.get(CONF_EMAIL), info.get(CONF_PASSWORD), info.get(TFA))
-            _LOGGER.info('auth_state: ' %auth_state)
+            _LOGGER.info('auth_state: %s' % auth_state)
             if(auth_state == 'OK'):
-                existing_entry = await self.async_set_unique_id(self.eufyApi.userId)
+                await self.async_set_unique_id(self.eufyApi.userId)
                 self._abort_if_unique_id_configured()
-                self.hass.config_entries.async_update_entry(
-                    existing_entry, data={
+                return self.async_create_entry(
+                    title='Eufy Security', data={
                         EUFY_TOKEN: self.eufyApi.token,
                         EUFY_TOKEN_EXPIRE_AT: self.eufyApi.token_expire_at,
                         EUFY_DOMAIN: self.eufyApi.domain,
@@ -70,17 +70,19 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
                         'unique_id': self.eufyApi.userId
                     }
                 )
-                return self.async_abort(reason="reauth_successful")
             elif(auth_state == 'send_verify_code'):
                 return await self.async_step_twofactor(info)
             # auth_state incorrect
             # return self._login_form(email=info.get(EMAIL), password=info.get(PASSWORD), tfa=info.get(TFA), step_id='reauth')
+            info.set('LOGIN_ERROR', True)
             return self.async_show_form(
                 step_id="user",
                 errors={"base": "login_error"},
                 description_placeholders={"message": ""},
             )
         else:
+            if(info is not None):
+                info.set('LOGIN_ERROR', False)
             return self._login_form(step_id='user')
         
     async def async_step_twofactor(self, info):

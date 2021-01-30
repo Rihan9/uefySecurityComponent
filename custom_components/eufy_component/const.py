@@ -1,7 +1,7 @@
-from eufySecurityApi.const import PARAM_TYPE, DEVICE_STATE
+from eufySecurityApi.const import PARAM_TYPE, DEVICE_STATE, GUARD_MODE
+from enum import Enum
 
-DOMAIN = "eufy_component"
-DUMMY_DEVICE_ID = 'DUMMY_123'
+DOMAIN = "eufy_security"
 
 TFA = 'Tfa'
 EMAIL = 'Email'
@@ -25,7 +25,19 @@ HASS_EUFY_API = 'Api'
 SUBSCRIBE_PROPERTY = [
     PARAM_TYPE.BATTERY_LEVEL,
     PARAM_TYPE.PROP_STATUS,
-    PARAM_TYPE.PROP_EVENT_NUM
+    PARAM_TYPE.PROP_EVENT_NUM,
+    PARAM_TYPE.GUARD_MODE,
+    PARAM_TYPE.SCHEDULE_MODE,
+    PARAM_TYPE.DEVICE_RSSI,
+    PARAM_TYPE.CAMERA_WIFI_RSSI
 ]
 
 USED_ENTITIES_DOMAIN = ['sensor', 'binary_sensor']
+
+
+PARAM_TYPE_TO_ENTITIES = {
+    PARAM_TYPE.GUARD_MODE: ('sensor', 'impostazione allarme', 'mdi:shield'),
+    PARAM_TYPE.DEVICE_RSSI: ('sensor', 'rssi connessione', 'mdi:wifi'),
+    PARAM_TYPE.CAMERA_WIFI_RSSI: ('sensor', 'rssi connessione', 'mdi:wifi'),
+    PARAM_TYPE.MOTION_SENSOR_PIR_SENSITIVITY: ('sensor', 'sensibilità al movimento', 'mdi:motion-sensor')
+}

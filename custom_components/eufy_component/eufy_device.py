@@ -22,19 +22,33 @@ class BaseDevice(CoordinatorEntity, Entity):
     @property
     def device_info(self):
         """Return a device description for device registry."""
-        parentStation = self._device.api.stations[self._device.station_sn]
-        return {
-            "connections": {(CONNECTION_NETWORK_MAC, self._device.wifi_mac)},
-            "identifiers": {
-                # Serial numbers are unique identifiers within a specific domain
-                (DOMAIN, self._device.serial)
-            },
-            "manufacturer": 'Eufy',
-            "model": self._device.model,
-            "name": self._device.name,
-            "sw_version": self._device.main_sw_version,
-            "via_device": (CONNECTION_NETWORK_MAC, parentStation.wifi_mac)
-        }
+        try:
+            parentStation = self._device.api.stations[self._device.station_sn]
+            return {
+                "connections": {(CONNECTION_NETWORK_MAC, self._device.wifi_mac)},
+                "identifiers": {
+                    # Serial numbers are unique identifiers within a specific domain
+                    (DOMAIN, self._device.serial)
+                },
+                "manufacturer": 'Eufy',
+                "model": self._device.model,
+                "name": self._device.name,
+                "sw_version": self._device.main_sw_version,
+                "via_device": (CONNECTION_NETWORK_MAC, parentStation.wifi_mac)
+            }
+        except:
+            return {
+                "connections": {(CONNECTION_NETWORK_MAC, self._device.wifi_mac)},
+                "identifiers": {
+                    # Serial numbers are unique identifiers within a specific domain
+                    (DOMAIN, self._device.serial)
+                },
+                "manufacturer": 'Eufy',
+                "model": self._device.model,
+                "name": self._device.name,
+                "sw_version": self._device.main_sw_version,
+            }
+
 
     
     @callback

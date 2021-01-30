@@ -1,3 +1,3 @@
-# Eufy Component for Home Assistant
+# Eufy Security Integrations for Home Assistant
 
 ## Installation

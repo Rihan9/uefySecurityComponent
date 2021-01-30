@@ -30,7 +30,7 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
     if(len(entities) > 0):
         async_add_devices(entities)  
     
-async def make_sensor_from_attribute(api, device, coordinator):
+def make_sensor_from_attribute(api, device, coordinator):
     entities = []
     for attribute in device.attribute:
         if attribute in PARAM_TYPE_TO_ENTITIES and PARAM_TYPE_TO_ENTITIES[attribute][0] == 'binary_sensor':

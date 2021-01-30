@@ -48,7 +48,7 @@ async def async_remove_entry(hass, entry) -> None:
                 if(entity_id is not None):
                     entity_registry.async_remove(entity_id)
 
-async def make_sensor_from_attribute(api, device, coordinator):
+def make_sensor_from_attribute(api, device, coordinator):
     entities = []
     for attribute in device.attribute:
         if attribute in PARAM_TYPE_TO_ENTITIES and PARAM_TYPE_TO_ENTITIES[attribute][0] == 'sensor':

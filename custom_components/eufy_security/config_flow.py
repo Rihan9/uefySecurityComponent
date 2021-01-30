@@ -74,15 +74,10 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 return await self.async_step_twofactor(info)
             # auth_state incorrect
             # return self._login_form(email=info.get(EMAIL), password=info.get(PASSWORD), tfa=info.get(TFA), step_id='reauth')
-            info.set('LOGIN_ERROR', True)
-            return self.async_show_form(
-                step_id="user",
-                errors={"base": "login_error"},
-                description_placeholders={"message": ""},
-            )
+            info['LOGIN_ERROR'] = True
+            
+            return self._login_form(step_id='user', errors={"base": "login_error"})
         else:
-            if(info is not None):
-                info.set('LOGIN_ERROR', False)
             return self._login_form(step_id='user')
         
     async def async_step_twofactor(self, info):
@@ -147,11 +142,14 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return 'KO'
 
 
-    def _login_form(self, email=None, password=None, tfa=None, step_id="user"):
-        return self.async_show_form(
-            step_id="user", data_schema=vol.Schema({
+    def _login_form(self, email=None, password=None, tfa=None, step_id="user", **kwargs):
+        if kwargs is None:
+            kwargs = {}
+        kwargs['step_id'] = step_id
+        kwargs['data_schema'] = vol.Schema({
                 vol.Required(CONF_EMAIL, default=email): str, 
                 vol.Required(CONF_PASSWORD, default=password): str,
                 vol.Required(TFA, default=tfa): vol.In([TFA_NONE, TFA_EMAIL, TFA_SMS, TFA_NOTIFICATION])
             })
-        )
+        
+        return self.async_show_form(**kwargs)

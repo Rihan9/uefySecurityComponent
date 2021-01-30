@@ -54,7 +54,8 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(self, info):
         if(info is not None):
-            auth_state = await self._login(info.get(EMAIL), info.get(PASSWORD), info.get(TFA))
+            auth_state = await self._login(info.get(CONF_EMAIL), info.get(CONF_PASSWORD), info.get(TFA))
+            _LOGGER.info('auth_state: ' %auth_state)
             if(auth_state == 'OK'):
                 existing_entry = await self.async_set_unique_id(self.eufyApi.userId)
                 self._abort_if_unique_id_configured()

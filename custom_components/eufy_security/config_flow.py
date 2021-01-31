@@ -1,6 +1,7 @@
 from homeassistant import config_entries
 from .const import (DOMAIN, PASSWORD, EMAIL, TFA, TFA_NONE, TFA_EMAIL, TFA_SMS, TFA_NOTIFICATION,
-    VERIFICATION_CODE, EUFY_TOKEN, EUFY_TOKEN_EXPIRE_AT, EUFY_DOMAIN, CURRENT_FLOW, CURRENT_FLOW_REAUTH, CURRENT_FLOW_USER
+    VERIFICATION_CODE, EUFY_TOKEN, EUFY_TOKEN_EXPIRE_AT, EUFY_DOMAIN, CURRENT_FLOW, CURRENT_FLOW_REAUTH, CURRENT_FLOW_USER,
+    TWO_FACTOR_AUTH_METHODS
 )
 
 from eufySecurityApi.api import Api, LoginException
@@ -25,7 +26,7 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_reauth(self, info):
         info[CURRENT_FLOW] = CURRENT_FLOW_REAUTH
         if(CONF_EMAIL in info):
-            auth_state = await self._login(info.get(CONF_PASSWORD), info.get(CONF_EMAIL), info.get(TFA))
+            auth_state = await self._login(info.get(CONF_PASSWORD), info.get(CONF_EMAIL), TWO_FACTOR_AUTH_METHODS[info.get(TFA)])
             if(auth_state == 'OK'):
                 existing_entry = await self.async_set_unique_id(self.eufyApi.userId)
                 self.hass.config_entries.async_update_entry(
@@ -50,7 +51,7 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if(info is not None):
            info[CURRENT_FLOW] = CURRENT_FLOW_USER
         if(info is not None and not info.get('LOGIN_ERROR')):
-            auth_state = await self._login(info.get(CONF_EMAIL), info.get(CONF_PASSWORD), info.get(TFA))
+            auth_state = await self._login(info.get(CONF_EMAIL), info.get(CONF_PASSWORD), TWO_FACTOR_AUTH_METHODS[info.get(TFA)])
             _LOGGER.info('auth_state: %s' % auth_state)
             if(auth_state == 'OK'):
                 await self.async_set_unique_id(self.eufyApi.userId)

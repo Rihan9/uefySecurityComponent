@@ -1,4 +1,4 @@
-from eufySecurityApi.const import PARAM_TYPE, DEVICE_STATE, GUARD_MODE
+from eufySecurityApi.const import PARAM_TYPE, DEVICE_STATE, GUARD_MODE, TWO_FACTOR_AUTH_METHODS
 from enum import Enum
 
 DOMAIN = "eufy_security"
@@ -12,9 +12,9 @@ CURRENT_FLOW_USER = 'USER'
 CURRENT_FLOW_REAUTH = 'REAUTH'
 
 TFA_NONE = 'None'
-TFA_EMAIL = 'Email'
-TFA_SMS = 'Sms'
-TFA_NOTIFICATION = 'Notification'
+TFA_EMAIL = 'EMAIL'
+TFA_SMS = 'SMS'
+TFA_NOTIFICATION = 'PUSH'
 
 EUFY_TOKEN = 'Token'
 EUFY_TOKEN_EXPIRE_AT = 'Token_expire_at'

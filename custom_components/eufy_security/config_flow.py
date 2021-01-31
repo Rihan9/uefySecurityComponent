@@ -165,7 +165,8 @@ class LoginFlow(config_entries.ConfigFlow, domain=DOMAIN):
         try:
             response = await self.eufyApi.authenticate()
             return response
-        except:
+        except Exception as e:
+            _LOGGER.exception(e)
             return 'KO'
 
 

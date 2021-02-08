@@ -15,4 +15,5 @@
 
 
 ## TODO:
-- [ ] correct the names of the sensor entity derived from device attribute in order to add device name at the beginning 
+- [ ] add attribute to monitor charge state (disconnected, charged, charged complete maybe?) 
+- [X] correct the names of the sensor entity derived from device attribute in order to add device name at the beginning 

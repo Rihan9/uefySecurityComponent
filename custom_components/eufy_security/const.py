@@ -1,4 +1,4 @@
-from eufySecurityApi.const import PARAM_TYPE, DEVICE_STATE, GUARD_MODE, TWO_FACTOR_AUTH_METHODS
+from eufySecurityApi.const import PARAM_TYPE, DEVICE_STATE, GUARD_MODE, TWO_FACTOR_AUTH_METHODS, POWER_MODE
 from enum import Enum
 
 DOMAIN = "eufy_security"
@@ -32,7 +32,8 @@ SUBSCRIBE_PROPERTY = [
     PARAM_TYPE.GUARD_MODE,
     PARAM_TYPE.SCHEDULE_MODE,
     PARAM_TYPE.DEVICE_RSSI,
-    PARAM_TYPE.CAMERA_WIFI_RSSI
+    PARAM_TYPE.CAMERA_WIFI_RSSI,
+    PARAM_TYPE.POWER_MODE
 ]
 
 USED_ENTITIES_DOMAIN = ['sensor', 'binary_sensor']
@@ -42,5 +43,6 @@ PARAM_TYPE_TO_ENTITIES = {
     PARAM_TYPE.GUARD_MODE: ('sensor', '%s impostazione allarme', 'mdi:shield'),
     PARAM_TYPE.DEVICE_RSSI: ('sensor', '%s rssi connessione', 'mdi:wifi'),
     PARAM_TYPE.CAMERA_WIFI_RSSI: ('sensor', '%s rssi connessione', 'mdi:wifi'),
-    PARAM_TYPE.MOTION_SENSOR_PIR_SENSITIVITY: ('sensor', '%s sensibilità al movimento', 'mdi:motion-sensor')
+    PARAM_TYPE.MOTION_SENSOR_PIR_SENSITIVITY: ('sensor', '%s sensibilità al movimento', 'mdi:motion-sensor'),
+    PARAM_TYPE.POWER_MODE: ('sensor', '%s modalità alimentazione', 'mdi:motion-sensor')
 }

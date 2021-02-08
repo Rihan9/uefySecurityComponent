@@ -70,7 +70,7 @@ class BaseDevice(CoordinatorEntity, Entity):
     @property
     def name(self):
         """Return the name of the device."""
-        return self._device.name
+        return self._device.name + self.device_class.lower()
 
     @property
     def unique_id(self):

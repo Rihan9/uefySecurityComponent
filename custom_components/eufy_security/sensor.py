@@ -57,7 +57,7 @@ def make_sensor_from_attribute(api, device, coordinator):
                 continue
             entities.append(
                 AttributeSensor(
-                    api, device, coordinator, attribute, p_name, p_icon
+                    api, device, coordinator, attribute, p_name % device.name, p_icon
                 )
             )
     return entities

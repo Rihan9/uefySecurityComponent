@@ -39,8 +39,8 @@ USED_ENTITIES_DOMAIN = ['sensor', 'binary_sensor']
 
 
 PARAM_TYPE_TO_ENTITIES = {
-    PARAM_TYPE.GUARD_MODE: ('sensor', 'impostazione allarme', 'mdi:shield'),
-    PARAM_TYPE.DEVICE_RSSI: ('sensor', 'rssi connessione', 'mdi:wifi'),
-    PARAM_TYPE.CAMERA_WIFI_RSSI: ('sensor', 'rssi connessione', 'mdi:wifi'),
-    PARAM_TYPE.MOTION_SENSOR_PIR_SENSITIVITY: ('sensor', 'sensibilità al movimento', 'mdi:motion-sensor')
+    PARAM_TYPE.GUARD_MODE: ('sensor', '%s impostazione allarme', 'mdi:shield'),
+    PARAM_TYPE.DEVICE_RSSI: ('sensor', '%s rssi connessione', 'mdi:wifi'),
+    PARAM_TYPE.CAMERA_WIFI_RSSI: ('sensor', '%s rssi connessione', 'mdi:wifi'),
+    PARAM_TYPE.MOTION_SENSOR_PIR_SENSITIVITY: ('sensor', '%s sensibilità al movimento', 'mdi:motion-sensor')
 }

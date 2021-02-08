@@ -44,5 +44,5 @@ PARAM_TYPE_TO_ENTITIES = {
     PARAM_TYPE.DEVICE_RSSI: ('sensor', '%s rssi connessione', 'mdi:wifi'),
     PARAM_TYPE.CAMERA_WIFI_RSSI: ('sensor', '%s rssi connessione', 'mdi:wifi'),
     PARAM_TYPE.MOTION_SENSOR_PIR_SENSITIVITY: ('sensor', '%s sensibilità al movimento', 'mdi:motion-sensor'),
-    PARAM_TYPE.POWER_MODE: ('sensor', '%s modalità alimentazione', 'mdi:motion-sensor')
+    PARAM_TYPE.POWER_MODE: ('sensor', '%s modalità alimentazione', 'mdi:power-plug')
 }

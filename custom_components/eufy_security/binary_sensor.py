@@ -4,7 +4,7 @@ from .utils import wrap
 import logging
 
 from homeassistant.components.binary_sensor import (
-    DEVICE_CLASS_MOTION
+    DEVICE_CLASS_MOTION, DEVICE_CLASS_DOOR
 )
 from homeassistant.const import STATE_OFF, STATE_ON
 
@@ -20,10 +20,12 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
     for device_sn in EufyApi.devices:
         device = EufyApi.devices[device_sn]
         if(device.isMotionSensor):
+            _LOGGER.debug('find motion sensor with serial: '+ device.serial)
             entities.append(
                 MotionSensor(EufyApi, device, coordinator)
             )
         if(device.isDoorSensor):
+            _LOGGER.debug('find door sensor with serial: '+ device.serial)
             entities.append(
                 DoorSensor(EufyApi, device, coordinator)
             )
@@ -132,7 +134,7 @@ class DoorSensor(BaseDevice):
     
     @property
     def device_class(self):
-        return DEVICE_CLASS_MOTION
+        return DEVICE_CLASS_DOOR
 
     @property
     def state(self):

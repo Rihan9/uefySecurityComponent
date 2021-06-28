@@ -1,4 +1,4 @@
-from .const import HASS_EUFY_API, DOMAIN, ENTITY_TYPE_MOTION_SENSOR, PARAM_TYPE_TO_ENTITIES
+from .const import HASS_EUFY_API, DOMAIN, ENTITY_TYPE_MOTION_SENSOR, PARAM_TYPE_TO_ENTITIES, PARAM_TYPE
 from .eufy_device import BaseDevice
 from .utils import wrap
 import logging
@@ -22,6 +22,10 @@ async def async_setup_entry(hass, config_entry, async_add_devices):
         if(device.isMotionSensor):
             entities.append(
                 MotionSensor(EufyApi, device, coordinator)
+            )
+        if(device.isDoorSensor):
+            entities.append(
+                DoorSensor(EufyApi, device, coordinator)
             )
         entities += make_sensor_from_attribute(EufyApi, device, coordinator)
     for station_sn in EufyApi.stations:
@@ -106,6 +110,25 @@ class MotionSensor(BaseDevice):
     @property
     def is_on(self):
         return self._device.motionDetected
+    
+    @property
+    def device_class(self):
+        return DEVICE_CLASS_MOTION
+
+    @property
+    def state(self):
+        """Return the state of the binary sensor."""
+        return STATE_ON if self.is_on else STATE_OFF
+
+
+class MotionSensor(BaseDevice):
+
+    @property
+    def is_on(self):
+        return wrap(
+            self._device,
+            PARAM_TYPE.SENSOR_CONTACT_OPEN
+        ) == '1'
     
     @property
     def device_class(self):

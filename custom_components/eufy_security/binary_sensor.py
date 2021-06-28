@@ -121,7 +121,7 @@ class MotionSensor(BaseDevice):
         return STATE_ON if self.is_on else STATE_OFF
 
 
-class MotionSensor(BaseDevice):
+class DoorSensor(BaseDevice):
 
     @property
     def is_on(self):
